@@ -1,3 +1,7 @@
+# Modify your program to only print the students whose name is shorter than 12
+# characters.
+
+
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
@@ -22,8 +26,13 @@ def print_header
 end
 
 def print(students)
+  count = 1
+  puts "Whose name is shorter than 12 characters"
   students.each do |student|
-    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+    if student[:name].length < 12
+      puts "#{count}. #{student[:name]} (#{student[:cohort]} cohort)"
+      count += 1
+    end
   end
 end
 

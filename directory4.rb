@@ -1,3 +1,6 @@
+#Rewrite the each() method that prints all students using while or until control
+# flow methods (Loops).
+
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
@@ -22,8 +25,12 @@ def print_header
 end
 
 def print(students)
-  students.each do |student|
-    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+  count == 0
+  until count == students.length
+  students.each_with_index do |student, index|
+    puts "#{count + 1}. #{students[count][:name]} (#{students[count][:cohort]} cohort)"
+    count += 1
+    end
   end
 end
 

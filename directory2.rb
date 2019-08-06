@@ -1,3 +1,7 @@
+# Modify your program to only print the students whose name begins with a
+#specific letter.
+
+
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
@@ -22,8 +26,13 @@ def print_header
 end
 
 def print(students)
+  count = 1
+  puts "With their name beginning with 'G'"
   students.each do |student|
-    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+    if student[:name].chr == "G"
+      puts "#{count}. #{student[:name]} (#{student[:cohort]} cohort)"
+    end
+    count += 1
   end
 end
 
