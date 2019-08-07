@@ -27,9 +27,10 @@ end
 
 def print(students)
   count = 1
-  puts "With their name beginning with 'G'"
+  puts "Enter the first character of their name."
+  letter = gets.chomp.upcase
   students.each do |student|
-    if student[:name].chr == "G"
+    if student[:name].chr == letter.upcase
       puts "#{count}. #{student[:name]} (#{student[:cohort]} cohort)"
     end
     count += 1
