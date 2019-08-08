@@ -1,14 +1,12 @@
-@students#Find an alternative to .chomp that truncates a string after gets.
+@students = [] #an empty array accessible to all methods
+
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
-  # create  an empty array
-  @students = []
+
   name = gets.strip
   # while the name is not empty, repeat this code
   while !name.empty? do
-
-cohort_count = 0
     puts "Which cohort is this person in? Input the month"
     cohort1 = gets.strip
     if cohort1 =~ /^[0-9]/
@@ -42,7 +40,6 @@ cohort_count = 0
     name = gets.strip
 
   end
-  @students
 end
 
 def print_header
@@ -53,13 +50,12 @@ def print_header
   end
 end
 
-def print(students)
-
+def print_students_list
   puts "Which cohort would you like to print out?"
   cohort_group = gets.strip.downcase.to_sym
   @count = 0
   new_list = []
-  students.each do |person|
+  @students.each do |person|
     person.each do |_, value|
       if value == cohort_group
         new_list << person
@@ -77,41 +73,73 @@ def print(students)
   end
 end
 
-def print_footer(students)
-  if students.empty?
+def print_footer
+  if @students.empty?
     puts "There are no students enrolled."
-  elsif students.count == 1
+  elsif @students.count == 1
     puts "Overall, we have #{@count.to_s} great student."
   else
     puts "Overall, we have #{@count.to_s} great students."
   end
 end
-#nothing happens until we call the methods
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit" # 9 because we'll be adding more items
+end
+
+def show_students
+  print_header
+  print_students_list
+  print_footer
+end
+
+def process(selection)
+  case selection
+  when "1"
+    input_students
+  when "2"
+    show_students
+  when "9"
+    exit
+  else
+    puts "I don't know what you mean, try again."
+  end
+end
 
 def interactive_menu
-  students = []
   loop do
-    # 1. print the menu and ask the user what to do
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "9. Exit" # 9 because we'll be adding more items
-    # 2. read the input and save it into a variable
-    selection = gets.chomp
-    # 3. do what the user has asked
-    case selection
-    when "1"
-      students = input_students
-    when "2"
-      print_header
-      print(students)
-      print_footer(students)
-    when "9"
-      exit
-    else
-      puts "I don't know what you meant, try again"
-      # 4. repeat from step 1
-    end
+    print_menu
+    process(gets.chomp)
   end
 end
 
 interactive_menu
+
+#nothing happens until we call the methods
+=begin
+def interactive_menu
+  students = []
+  loop do
+  # 1. print the menu and ask the user what to do
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit" # 9 because we'll be adding more items
+  # 2. read the input and save it into a variable
+  selection = gets.chomp
+  # 3. do what the user has asked
+  case selection
+  when "1"
+    students = input_students
+  when "2"
+    print_header
+    print(students)
+    print_footer(students)
+  when "9"
+    exit
+  else
+    puts "I don't know what you meant, try again"
+  # 4. repeat from step 1
+end
+=end
