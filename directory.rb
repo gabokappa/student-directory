@@ -82,10 +82,14 @@ def save_students
 end
 
 def load_students(filename = "students.csv")
+  if !File.exist?(filename)
+    return puts "File not available, try another option."
+  else
   file = File.open(filename, "r")
-  file.readlines.each do |line|
-    name, cohort = line.chomp.split(',')
-    @students << {name: name, cohort: cohort.to_sym}
+    file.readlines.each do |line|
+      name, cohort = line.chomp.split(',')
+      @students << {name: name, cohort: cohort.to_sym}
+    end
   end
   file.close
 end
