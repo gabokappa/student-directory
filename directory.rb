@@ -12,7 +12,7 @@ def input_students
   puts "Which cohort are they in?"
   cohort = STDIN.gets.chomp
   # while the name is not empty, repeat this code
-  while !name.empty? do
+  while !name.empty? || !cohort.empty? do
     # add the student hash to the array
     add_students(name, cohort)
     puts "Now we have #{@students.count} students"
@@ -87,7 +87,7 @@ def save_students
     file.puts csv_line
   end
   file.close
-  puts "Student names saved."
+  puts "Student names successfully saved."
 end
 
 def load_students(filename = "students.csv")
