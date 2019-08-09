@@ -54,7 +54,9 @@ def process(selection)
   when "3"
     save_students
   when "4"
-    load_students
+    puts "Input the filename you would like to load"
+    filename = STDIN.gets.chomp
+    load_students(filename)
   when "9"
     exit # this will cause the program to terminate
   else
@@ -78,8 +80,9 @@ def print_footer
 end
 
 def save_students
-  #open the file for writing
-  file = File.open("students.csv", "w")
+  puts "What name do you want to give this file? Use .csv suffix"
+  filename = STDIN.gets.chomp
+  file = File.open(filename, "w")
   #iterate over the array of students
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
@@ -90,7 +93,7 @@ def save_students
   puts "Student names successfully saved."
 end
 
-def load_students(filename = "students.csv")
+def load_students(filename)
   if !File.exist?(filename)
     return puts "File not available, try another option."
   else
@@ -107,8 +110,8 @@ end
 def try_load_students
   filename = ARGV.first # first argument from the command line
   if filename.nil?
-    puts "No file name provided, default file students.csv has been loaded."
-    load_students
+    puts "No file name provided, attempt to load default 'students.csv'."
+    load_students("students.csv")
   elsif File.exist?(filename) #if it exists
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
