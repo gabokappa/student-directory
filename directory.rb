@@ -1,4 +1,5 @@
-# useful URL: https://www.rubyguides.com/2015/05/working-with-files-ruby/
+require 'csv'
+# useful URL: https://www.sitepoint.com/guide-ruby-csv-library-part/
 
 @students = [] # an empty array accessible to all methods
 
@@ -84,12 +85,10 @@ end
 def save_students
   puts "What name do you want to give this file? Use .csv suffix"
   filename = STDIN.gets.chomp
-  File.open(filename, "w") do |file|
+  CSV.open(filename, "w") do |csv|
   #iterate over the array of students
   @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+    csv << [student[:name], student[:cohort]]
   end
 end
   puts "*** Student names successfully saved ***"
@@ -99,8 +98,8 @@ def load_students(filename)
   if !File.exist?(filename)
     return puts "File not available, try another option."
   else
-    File.foreach(filename) do |line|
-      name, cohort = line.chomp.split(',')
+    CSV.foreach(filename) do |row|
+      name, cohort = row
       add_students(name, cohort)
     end
     puts "+++ File has been successfully loaded +++"
