@@ -20,7 +20,11 @@ def input_students
     hobby = STDIN.gets.chomp
     # add the student hash to the array
     add_students(name, cohort, hobby)
-    puts "Now we have #{@students.count} students"
+    if @students.count == 1
+      puts "Now we have 1 student"
+    else
+        puts "Now we have #{@students.count} students"
+    end
     # get another name from the user
     puts "Enter another name please."
     name = STDIN.gets.chomp
@@ -127,7 +131,7 @@ def print_by_cohort
       count += 1
     end
   end
-  print_footer    
+  print_footer
 end
 
 def print_footer
