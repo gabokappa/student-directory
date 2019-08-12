@@ -38,8 +38,9 @@ def print_menu
   puts "1. Input the students"
   puts "2. Show the  list of students"
   puts "3. Search list of students by first character of their name"
-  puts "4. Save the list of students"
-  puts "5. Load a list of students"
+  puts "4. Show names by length"
+  puts "7. Save the list of students"
+  puts "8. Load a list of students"
   puts "9. Exit" # 9 because we'll be adding more items
 end
 
@@ -58,8 +59,10 @@ def process(selection)
   when "3"
     print_by_character
   when "4"
+    print_by_length
+  when "7"
     save_students
-  when "5"
+  when "8"
     puts "Input the filename you would like to load"
     filename = STDIN.gets.chomp
     load_students(filename)
@@ -67,6 +70,20 @@ def process(selection)
     exit # this will cause the program to terminate
   else
     puts "I don't know what you meant, try again"
+  end
+end
+
+def print_by_length
+  puts "How many characters does the name have?"
+  char_length = STDIN.gets.chomp
+  count = 1
+  @students.each do |student|
+    if student[:name].length >= char_length.to_i
+      puts "#{count}. #{student[:name]} (#{student[:cohort]} cohort)"
+      count += 1
+    else
+      puts "No student longer than #{char_length}."
+    end
   end
 end
 
