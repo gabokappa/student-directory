@@ -96,7 +96,7 @@ end
 
 def print_student_list
   @students.each_with_index do |student, index|
-    puts "#{index + 1}) #{student[:name]} (#{student[:cohort]} cohort) favourite hobby #{student[:hobbies]}"
+    puts "#{index + 1}) #{student[:name]} (#{student[:cohort]} cohort) favourite hobby #{student[:hobbies]}".center(80, ' ***')
   end
 end
 
@@ -104,16 +104,20 @@ def print_by_character
   puts "Enter the first character of their name."
   letter = STDIN.gets.chomp
   count = 1
+  puts ""
   @students.each do |student|
     if student[:name].chr == letter.upcase
-      puts "#{count}) #{student[:name]} (#{student[:cohort]} cohort) favourite hobby #{student[:hobbies]}"
+      puts "#{count}) #{student[:name]} (#{student[:cohort]} cohort) favourite hobby #{student[:hobbies]}".center(80, ' X')
       count += 1
     end
   end
+  print_footer
 end
 
 def print_footer
+  puts ""
   puts "Overall, we have #{@students.count} great students"
+  puts "-------------"
 end
 
 def save_students
@@ -138,13 +142,14 @@ def load_students(filename)
         add_students(name, cohort, hobby)
     end
     puts "+++ File has been successfully loaded +++"
+    puts ""
   end
 end
 
 def try_load_students
   filename = ARGV.first # first argument from the command line
   if filename.nil?
-    puts "No file name provided, attempt to load default 'students.csv'."
+    puts "No file name provided, default file 'students.csv' wil be loaded"
     load_students("students.csv")
   elsif File.exist?(filename) #if it exists
     load_students(filename)

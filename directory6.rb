@@ -39,7 +39,7 @@ def print(students)
   count = 0
   until count == students.length
   students.each_with_index do |student, index|
-    puts ("#{count + 1}. #{students[count][:name]} (#{students[count][:cohort]} cohort)").center(60, '*** ')
+    puts ("#{count + 1}. #{students[count][:name]} (#{students[count][:cohort]} cohort)").center(60, '***')
     puts "Hobbies: #{students[count][:hobbies]} Height: #{students[count][:height]}"
     puts "Country of birth: #{students[count][:birth]}"
     puts ""
