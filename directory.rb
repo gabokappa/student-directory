@@ -4,7 +4,7 @@ require 'csv'
 @students = [] # an empty array accessible to all methods
 
 def add_students(name, cohort)
-  @students << {name: name, cohort: cohort.to_sym}
+  @students << {name: name.capitalize, cohort: cohort.capitalize.to_sym}
 end
 
 def input_students
@@ -37,8 +37,9 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the  list of students"
-  puts "3. Save the list of students"
-  puts "4. Load a list of students"
+  puts "3. Search list of students by first character of their name"
+  puts "4. Save the list of students"
+  puts "5. Load a list of students"
   puts "9. Exit" # 9 because we'll be adding more items
 end
 
@@ -55,8 +56,10 @@ def process(selection)
   when "2"
     show_students
   when "3"
-    save_students
+    print_by_character
   when "4"
+    save_students
+  when "5"
     puts "Input the filename you would like to load"
     filename = STDIN.gets.chomp
     load_students(filename)
@@ -75,6 +78,18 @@ end
 def print_student_list
   @students.each_with_index do |student, index|
     puts "#{index + 1}) #{student[:name]} (#{student[:cohort]} cohort)"
+  end
+end
+
+def print_by_character
+  puts "Enter the first character of their name."
+  letter = STDIN.gets.chomp
+  count = 1
+  @students.each do |student|
+    if student[:name].chr == letter.upcase
+      puts "#{count}) #{student[:name]} (#{student[:cohort]} cohort)"
+      count += 1
+    end
   end
 end
 
