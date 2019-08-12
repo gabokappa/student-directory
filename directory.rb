@@ -3,8 +3,8 @@ require 'csv'
 
 @students = [] # an empty array accessible to all methods
 
-def add_students(name, cohort)
-  @students << {name: name.capitalize, cohort: cohort.capitalize.to_sym}
+def add_students(name, cohort, hobby='n/a')
+  @students << {name: name.capitalize, cohort: cohort.capitalize.to_sym, hobbies: hobby}
 end
 
 def input_students
@@ -16,8 +16,10 @@ def input_students
   cohort = STDIN.gets.chomp
   # while the name is not empty, repeat this code
   while !name.empty? || !cohort.empty? do
+    puts "What is this student's hobby?"
+    hobby = STDIN.gets.chomp
     # add the student hash to the array
-    add_students(name, cohort)
+    add_students(name, cohort, hobby)
     puts "Now we have #{@students.count} students"
     # get another name from the user
     puts "Enter another name please."
@@ -79,7 +81,7 @@ def print_by_length
   count = 1
   @students.each do |student|
     if student[:name].length >= char_length.to_i
-      puts "#{count}. #{student[:name]} (#{student[:cohort]} cohort)"
+      puts "#{count}. #{student[:name]} (#{student[:cohort]} cohort) favourite hobby #{student[:hobbies]}"
       count += 1
     else
       puts "No student longer than #{char_length}."
@@ -94,7 +96,7 @@ end
 
 def print_student_list
   @students.each_with_index do |student, index|
-    puts "#{index + 1}) #{student[:name]} (#{student[:cohort]} cohort)"
+    puts "#{index + 1}) #{student[:name]} (#{student[:cohort]} cohort) favourite hobby #{student[:hobbies]}"
   end
 end
 
@@ -104,7 +106,7 @@ def print_by_character
   count = 1
   @students.each do |student|
     if student[:name].chr == letter.upcase
-      puts "#{count}) #{student[:name]} (#{student[:cohort]} cohort)"
+      puts "#{count}) #{student[:name]} (#{student[:cohort]} cohort) favourite hobby #{student[:hobbies]}"
       count += 1
     end
   end
@@ -120,7 +122,7 @@ def save_students
   CSV.open(filename, "w") do |csv|
   #iterate over the array of students
   @students.each do |student|
-    csv << [student[:name], student[:cohort]]
+    csv << [student[:name], student[:cohort], student[:hobbies]]
   end
 end
   puts "*** Student names successfully saved ***"
@@ -131,8 +133,9 @@ def load_students(filename)
     return puts "File not available, try another option."
   else
     CSV.foreach(filename) do |row|
-      name, cohort = row
-      add_students(name, cohort)
+      name, cohort, hobby = row
+      hobby = 'n/a' if hobby == nil
+        add_students(name, cohort, hobby)
     end
     puts "+++ File has been successfully loaded +++"
   end
