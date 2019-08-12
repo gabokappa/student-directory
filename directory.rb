@@ -38,9 +38,10 @@ end
 
 def print_menu
   puts "1. Input the students"
-  puts "2. Show the  list of students"
+  puts "2. Show the list of students"
   puts "3. Search list of students by first character of their name"
-  puts "4. Show names by length"
+  puts "4. List names by length"
+  puts "5. List students by cohort group"
   puts "7. Save the list of students"
   puts "8. Load a list of students"
   puts "9. Exit" # 9 because we'll be adding more items
@@ -62,6 +63,8 @@ def process(selection)
     print_by_character
   when "4"
     print_by_length
+  when "5"
+    print_by_cohort
   when "7"
     save_students
   when "8"
@@ -112,6 +115,19 @@ def print_by_character
     end
   end
   print_footer
+end
+
+def print_by_cohort
+  count = 1
+  puts "Which cohorot would you like to display on screen?"
+  cohort_group = STDIN.gets.chomp.capitalize.to_sym
+  @students.each do |student|
+    if student[:cohort] == cohort_group
+      puts "#{count}) #{student[:name]} (#{student[:cohort]} cohort) favourite hobby #{student[:hobbies]}".center(80, ' X')
+      count += 1
+    end
+  end
+  print_footer    
 end
 
 def print_footer
