@@ -1,7 +1,7 @@
 require 'csv'
 # useful URL: https://www.sitepoint.com/guide-ruby-csv-library-part/
 
-@students = [] # an empty array accessible to all methods
+@students = []
 
 def add_students(name, cohort, hobby='n/a')
   @students << {name: name.capitalize, cohort: cohort.capitalize.to_sym, hobbies: hobby}
@@ -10,26 +10,33 @@ end
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
-  # get the first name
-  name = STDIN.gets.chomp
+    name = STDIN.gets.chomp
   puts "Which cohort are they in?"
-  cohort = STDIN.gets.chomp
-  # while the name is not empty, repeat this code
+    cohort = STDIN.gets.chomp
+
+  loop_input(name, cohort)
+end
+
+  def loop_input(name, cohort)
   while !name.empty? || !cohort.empty? do
     puts "What is this student's hobby?"
-    hobby = STDIN.gets.chomp
-    # add the student hash to the array
+      hobby = STDIN.gets.chomp
+      hobby = 'n/a' if hobby.empty?
     add_students(name, cohort, hobby)
-    if @students.count == 1
-      puts "Now we have 1 student"
-    else
-        puts "Now we have #{@students.count} students"
-    end
-    # get another name from the user
+      student_count
     puts "Enter another name please."
-    name = STDIN.gets.chomp
+      name = STDIN.gets.chomp
     puts "Which cohort are they in?"
-    cohort = STDIN.gets.chomp
+      cohort = STDIN.gets.chomp
+  end
+end
+
+def student_count
+  puts "*" * 80
+  if @students.count == 1
+    puts "Now we have 1 student"
+  else
+    puts "Now we have #{@students.count} students"
   end
 end
 
@@ -41,20 +48,29 @@ def interactive_menu
 end
 
 def print_menu
+  puts ""
+  puts "MAIN MENU".center(80, ' +')
   puts "1. Input the students"
   puts "2. Show the list of students"
   puts "3. Search list of students by first character of their name"
   puts "4. List names by length"
   puts "5. List students by cohort group"
+  puts "6. Wipe the current list"
   puts "7. Save the list of students"
   puts "8. Load a list of students"
-  puts "9. Exit" # 9 because we'll be adding more items
+  puts "9. Exit"
+  puts "".center(80, ' +')
 end
 
 def show_students
+if @students.length == 0
+  puts ""
+  puts "No students to show".center(80, ' !')
+else
   print_header
   print_student_list
   print_footer
+end
 end
 
 def process(selection)
@@ -69,6 +85,8 @@ def process(selection)
     print_by_length
   when "5"
     print_by_cohort
+  when "6"
+    delete_list
   when "7"
     save_students
   when "8"
@@ -76,7 +94,7 @@ def process(selection)
     filename = STDIN.gets.chomp
     load_students(filename)
   when "9"
-    exit # this will cause the program to terminate
+    exit
   else
     puts "I don't know what you meant, try again"
   end
@@ -84,8 +102,8 @@ end
 
 def print_by_length
   puts "How many characters does the name have?"
-  char_length = STDIN.gets.chomp
-  count = 1
+    char_length = STDIN.gets.chomp
+    count = 1
   @students.each do |student|
     if student[:name].length >= char_length.to_i
       puts "#{count}. #{student[:name]} (#{student[:cohort]} cohort) favourite hobby #{student[:hobbies]}"
@@ -97,7 +115,7 @@ def print_by_length
 end
 
 def print_header
-  puts "THE LIST OF STUDENTS"
+  puts "\nTHE LIST OF STUDENTS"
   puts "-------------"
 end
 
@@ -135,16 +153,21 @@ def print_by_cohort
 end
 
 def print_footer
-  puts ""
-  puts "Overall, we have #{@students.count} great students"
-  puts "-------------"
+  if @students.length == 0
+    puts ""
+    puts "No students to show".center(80, ' !')
+  else
+    @students.count <= 1? (quantity = "student") : (quantity = "students")
+    puts ""
+    puts "Overall, we have #{@students.count} great #{quantity}"
+    puts "-------------"
+  end
 end
 
 def save_students
   puts "What name do you want to give this file? Use .csv suffix"
   filename = STDIN.gets.chomp
   CSV.open(filename, "w") do |csv|
-  #iterate over the array of students
   @students.each do |student|
     csv << [student[:name], student[:cohort], student[:hobbies]]
   end
@@ -152,9 +175,20 @@ end
   puts "*** Student names successfully saved ***"
 end
 
+def delete_list
+  puts "Are you sure you want to wipe the list? Type Y/N"
+  decision = STDIN.gets.chomp.upcase
+  if decision == "Y"
+    @students = []
+    puts "\nList has been wiped"
+  else
+    puts "Nothing has been wiped"
+  end
+end
+
 def load_students(filename)
   if !File.exist?(filename)
-    return puts "File not available, try another option."
+    return puts "File not available, try another option below."
   else
     CSV.foreach(filename) do |row|
       name, cohort, hobby = row
@@ -167,16 +201,18 @@ def load_students(filename)
 end
 
 def try_load_students
-  filename = ARGV.first # first argument from the command line
+  filename = ARGV.first
   if filename.nil?
-    puts "No file name provided, default file 'students.csv' wil be loaded"
+puts ""
+    puts "*" * 80
+    puts "\nNo file name provided, default file 'students.csv' wil be loaded"
     load_students("students.csv")
-  elsif File.exist?(filename) #if it exists
+  elsif File.exist?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
-  else # if it doesn't exist
+  else
     puts "Sorry, #{filename} doesn't exist."
-    exit #quit the program
+    exit
   end
 end
 
