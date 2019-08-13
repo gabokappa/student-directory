@@ -209,7 +209,7 @@ puts ""
     load_students("students.csv")
   elsif File.exist?(filename)
     load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
+    puts "Loaded #{@students.count} students from #{filename}"
   else
     puts "Sorry, #{filename} doesn't exist."
     exit
